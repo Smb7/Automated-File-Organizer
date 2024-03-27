@@ -42,6 +42,30 @@ class GUI(Tk):
                 if self.dir_name not in self.file_list:
                     os.mkdir(self.new_path)
                 shutil.move(file, self.new_path)
+
+            elif file.endswith('.pdf'):
+                self.dir_name = "pdfFiles"
+                self.new_path = os.path.join(path_value, self.dir_name)
+                self.file_list = os.listdir()
+                if self.dir_name not in self.file_list:
+                    os.mkdir(self.new_path)
+                shutil.move(file, self.new_path)
+
+            elif file.endswith('.docx'):
+                self.dir_name = "WordFiles"
+                self.new_path = os.path.join(path_value, self.dir_name)
+                self.file_list = os.listdir()
+                if self.dir_name not in self.file_list:
+                    os.mkdir(self.new_path)
+                shutil.move(file, self.new_path)
+
+            elif file.endswith('.xlsx'):
+                self.dir_name = "ExcelFiles"
+                self.new_path = os.path.join(path_value, self.dir_name)
+                self.file_list = os.listdir()
+                if self.dir_name not in self.file_list:
+                    os.mkdir(self.new_path)
+                shutil.move(file, self.new_path)
             count = count+1
 
         if (count == no_of_files):
