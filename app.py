@@ -1,79 +1,26 @@
+# main.py
+
 from tkinter import *
-from tkinter import filedialog
-import os 
-import shutil
+from tkinter import filedialog, messagebox
+from FileOrganizer import FileOrganizer  # Adjust the import path as necessary
 
 class GUI(Tk):
     def __init__(self):
         super().__init__()
         self.geometry('500x500')
+        self.title("File Organizer")
 
-    def gettingPath(self):
-        self.path = filedialog.askdirectory()
-        return self.path
-    
-    def startbutton(self, path_value):
-        self.button_Frame = Frame(self)
-        self.button_Frame.pack()
-        self.start_Button = Button(self.button_Frame, text='Start', command=lambda: self.startOperation(path_value)).grid(row=0, column=0)
+        self.organizer = FileOrganizer()  # Instance of your FileOrganizer
 
-    def startOperation(self, path_value):
-        count = 0
-        os.chdir(path_value)
-        self.file_list = os.listdir()
-        no_of_files = len(self.file_list)
-        if len(self.file_list) == 0:
-            self.error_label = Label (text="Error empty")
-            exit()
+        self.select_button = Button(self, text="Select Directory and Organize", command=self.select_and_organize)
+        self.select_button.pack(pady=20)
 
-        for file in self.file_list:
-            if file.endswith(".png"):
-                self.dir_name = "PngFiles"
-                self.new_path = os.path.join(path_value, self.dir_name)
-                self.file_list = os.listdir()
-                if self.dir_name not in self.file_list:
-                    os.mkdir(self.new_path)
-                shutil.move(file, self.new_path)
+    def select_and_organize(self):
+        directory_path = filedialog.askdirectory()
+        if directory_path:  # Proceed only if a directory was selected
+            result = self.organizer.organize_files_by_extension(directory_path)
+            messagebox.showinfo("Result", result)  # Show the result in a message box
 
-            elif file.endswith('.txt'):
-                self.dir_name = "TextFiles"
-                self.new_path = os.path.join(path_value, self.dir_name)
-                self.file_list = os.listdir()
-                if self.dir_name not in self.file_list:
-                    os.mkdir(self.new_path)
-                shutil.move(file, self.new_path)
-
-            elif file.endswith('.pdf'):
-                self.dir_name = "pdfFiles"
-                self.new_path = os.path.join(path_value, self.dir_name)
-                self.file_list = os.listdir()
-                if self.dir_name not in self.file_list:
-                    os.mkdir(self.new_path)
-                shutil.move(file, self.new_path)
-
-            elif file.endswith('.docx'):
-                self.dir_name = "WordFiles"
-                self.new_path = os.path.join(path_value, self.dir_name)
-                self.file_list = os.listdir()
-                if self.dir_name not in self.file_list:
-                    os.mkdir(self.new_path)
-                shutil.move(file, self.new_path)
-
-            elif file.endswith('.xlsx'):
-                self.dir_name = "ExcelFiles"
-                self.new_path = os.path.join(path_value, self.dir_name)
-                self.file_list = os.listdir()
-                if self.dir_name not in self.file_list:
-                    os.mkdir(self.new_path)
-                shutil.move(file, self.new_path)
-            count = count+1
-
-        if (count == no_of_files):
-            success = Label(text="Operation Successful!").pack()
-        else:
-            error = Label(text="Failed").pack()
 if __name__ == '__main__':
-    object = GUI()
-    path = object.gettingPath()
-    object.startbutton(path)
-    object.mainloop()
+    app = GUI()
+    app.mainloop()
